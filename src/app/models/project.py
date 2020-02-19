@@ -277,7 +277,7 @@ def update_task_status(taskid, status):
     try:
         cursor.execute(query)
         db.commit()
-    except:
+    except mysql.connector.Error as err:
         print("Failed executing query: {}".format(err))
         cursor.fetchall()
         exit(1)

@@ -69,7 +69,6 @@ def get_user_name_by_id(userid):
     finally:
         cursor.close()
         db.close()
-    cursor.close()
     return username
 
 def match_user(username, password):

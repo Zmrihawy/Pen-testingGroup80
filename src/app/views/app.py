@@ -11,9 +11,15 @@ from views.index import Index
 from views.apply import Apply
 
 # Connect to smtp server, enables web.sendmail()
-groupid = os.getenv("groupid").lstrip("0")
-web.config.smtp_server = '10.' + groupid + '.0.7:25'
-#web.sendmail("mailserver@beelance2.com", "some@user.com", "Hello", "Grz, the beelance app is running")
+try:
+    smtp_server = os.getenv("smtp_server") + ":25"
+    web.config.smtp_server = smtp_server 
+except:
+    smtp_server = "molde.idi.ntnu.no:25"
+    web.config.smtp_server = smtp_server
+
+# Example use of the smtp server, insert username
+# web.sendmail("beelance@ntnu.no", "<username>@stud.ntnu.no", "Hello", "Grz, the beelance app is running")
 
 # Define application routes
 urls = (
