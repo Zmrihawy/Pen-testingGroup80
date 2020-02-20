@@ -21,9 +21,9 @@ IMPORTANT Windows users must use:
 > docker-compose up
 
 6. The application should become available on URL:
-http://0.0.0.0:80\<groupid\> <br>
+http://0.0.0.0:80<groupid\> or http://127.0.0.1:80<groupid\> <br>
 Or if you are running docker-toolbox :
-http://192.168.99.100:80\<groupid\>
+http://192.168.99.100:80<groupid\>
 
 ### Build / Rebuild
 
