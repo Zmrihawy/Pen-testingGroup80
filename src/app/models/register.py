@@ -1,6 +1,6 @@
 from models.database import db
 import mysql.connector
-import app.models.logger as logger
+import models.logger as logger
 
 def set_user(username, password, full_name, company, email, 
         street_address, city, state, postal_code, country):

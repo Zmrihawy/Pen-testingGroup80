@@ -1,6 +1,6 @@
 from models.database import db
 import mysql.connector
-import app.models.logger as logger
+import models.logger as logger
 
 def get_users():
     """
