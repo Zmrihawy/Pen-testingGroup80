@@ -1,5 +1,6 @@
 from models.database import db
 import mysql.connector
+import app.models.logger as logger
 
 def set_user(username, password, full_name, company, email, 
         street_address, city, state, postal_code, country):
@@ -28,14 +29,19 @@ def set_user(username, password, full_name, company, email,
     """
     db.connect()
     cursor = db.cursor()
-    query = ("INSERT INTO users VALUES (NULL, \"" + username + "\", \"" + 
-        password + "\", \"" + full_name + "\" , \"" + company + "\", \"" + 
-        email + "\", \"" + street_address + "\", \"" + city + "\", \"" + 
-        state  + "\", \"" + postal_code + "\", \"" + country + "\")")
+    sql_cmd = """INSERT INTO users VALUES (NULL, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"""
+    sql_value = (username, password, full_name, company, 
+                 email, street_address, city, 
+                 state, postal_code, country)
+    #query = ("INSERT INTO users VALUES (NULL, \"" + username + "\", \"" + 
+    #    password + "\", \"" + full_name + "\" , \"" + company + "\", \"" + 
+    #    email + "\", \"" + street_address + "\", \"" + city + "\", \"" + 
+    #    state  + "\", \"" + postal_code + "\", \"" + country + "\")")
     try:
-        cursor.execute(query)
+        cursor.execute(sql_cmd, sql_value)
         db.commit()
     except mysql.connector.Error as err:
+        logger.log_error_msg(err)
         print("Failed executing query: {}".format(err))
         cursor.fetchall()
         exit(1)

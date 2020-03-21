@@ -1,4 +1,4 @@
-FROM mysql:5.7.15
+FROM mysql:latest
 
 MAINTAINER me
 

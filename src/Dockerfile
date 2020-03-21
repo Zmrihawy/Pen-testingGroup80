@@ -13,6 +13,9 @@ ENV PYTHONPATH=/app
 # Install python dependencies
 RUN pip install --no-cache-dir -r requirements.txt
 
+# update pip
+RUN pip install --upgrade pip
+
 # Move the base entrypoint to reuse it
 RUN mv /entrypoint.sh /uwsgi-nginx-entrypoint.sh
 # Copy the entrypoint that will generate Nginx additional configs
