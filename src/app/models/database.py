@@ -10,7 +10,7 @@ Change the host address depending on where the mysql server is running. To conne
 preconfigured docker container address use the Docker address. The default port is 3306.
 """
 
-# using the latest mysql
+# using the latest mysql-python
 # therefore reference: https://stackoverflow.com/questions/50557234/authentication-plugin-caching-sha2-password-is-not-supported
 
 db = mysql.connector.connect(
@@ -20,6 +20,6 @@ db = mysql.connector.connect(
     #host='0.0.0.0',    # Local address
     database='db',
     charset = 'utf8',
-    auth_plugin = 'mysql_native_password'
+    auth_plugin='mysql_native_password'
 )
     

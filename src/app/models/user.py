@@ -33,7 +33,7 @@ def get_user_id_by_name(username):
     db.connect()
     cursor = db.cursor()
     sql_cmd = """SELECT userid from users WHERE username = %s"""
-    sql_value = (username)
+    sql_value = (username,)
     #query = ("SELECT userid from users WHERE username =\"" + username + "\"")
     
     userid = None
@@ -61,7 +61,7 @@ def get_user_name_by_id(userid):
     db.connect()
     cursor = db.cursor()
     sql_cmd = """SELECT username from users WHERE userid = %s"""
-    sql_value = (userid)
+    sql_value = (userid,)
     #query = ("SELECT username from users WHERE userid =\"" + userid + "\"")
     username = None
     try:
@@ -91,8 +91,8 @@ def match_user(username, password):
     """
     db.connect()
     cursor = db.cursor()
-    sql_cmd = """SELECT userid, username from users where username = %s AND passsword = %s"""
-    sql_value = (username, password)
+    sql_cmd = """SELECT userid, username from users where username = %s AND password = %s"""
+    sql_value = (username, password,)
     #query = ("SELECT userid, username from users where username = \"" + username + 
     #        "\" and password = \"" + password + "\"")
     user = None

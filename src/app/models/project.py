@@ -46,7 +46,7 @@ def set_project(categoryid, userid, project_title, project_description, project_
     db.connect()
     cursor = db.cursor()
     sql_cmd = "INSERT INTO projects VALUES (NULL, %s, %s, %s, %s, %s)"
-    sql_value = (categoryid, userid, project_title, project_description, project_status)
+    sql_value = (categoryid, userid, project_title, project_description, project_status,)
     #query = ("INSERT INTO projects VALUES (NULL, \"" + 
     #    categoryid + "\", \"" + userid + "\", \"" + project_title + "\", \"" + 
     #    project_description + "\", \"" + project_status + "\")")
@@ -77,7 +77,7 @@ def get_project_by_id(projectid):
     db.connect()
     cursor = db.cursor()
     sql_cmd = """SELECT * FROM projects WHERE projectid = %s"""
-    sql_value = (projectid)
+    sql_value = (projectid,)
     #query = ("SELECT * FROM projects WHERE projectid = \"" + projectid + "\"")
     try:
         cursor.execute(sql_cmd, sql_value)
@@ -104,7 +104,7 @@ def update_project_status(projectid, status):
     db.connect()
     cursor = db.cursor()
     sql_cmd = """UPDATE projects SET project_status = %s WHERE porjectid = %s"""
-    sql_value = (status, projectid)
+    sql_value = (status, projectid,)
     #query = ("UPDATE projects SET project_status = \"" + status + 
     #    "\" WHERE projectid = \"" + projectid + "\"")
     try:
@@ -133,7 +133,7 @@ def get_user_permissions(userid, projectid):
 
     sql_cmd = """SELECT read_permission, write_permission, modify_permission FROM projects_users\
         WHERE projectid = %s AND userid = %s"""
-    sql_value = (projectid, userid)
+    sql_value = (projectid, userid,)
     #query = ("SELECT read_permission, write_permission, modify_permission \
     #    FROM projects_users WHERE projectid = \"" + projectid + 
     #    "\" AND userid = \"" + userid + "\"")
@@ -165,7 +165,7 @@ def get_projects_by_status_and_category(categoryid, project_status):
     db.connect()
     cursor = db.cursor()
     sql_cmd = """SELECT * FROM projects WHERE project_status = %s AND categoryid = %s """
-    sql_value = (project_status, categoryid)
+    sql_value = (project_status, categoryid,)
     #query = ("SELECT * FROM projects WHERE project_status = \"" + 
     #    project_status + "\" AND categoryid = \"" + categoryid + "\"")
     try:
@@ -193,7 +193,7 @@ def get_projects_by_owner(userid):
     cursor = db.cursor()
 
     sql_cmd = """SELECT * FROM projects WHERE userid = %s"""
-    sql_value = (userid)
+    sql_value = (userid,)
     #query = ("SELECT * FROM projects WHERE userid = \"" + userid + "\"")
     try:
         cursor.execute(sql_cmd, sql_value)
@@ -223,7 +223,7 @@ def get_projects_by_status_and_owner(userid, project_status):
     cursor = db.cursor()
 
     sql_cmd = """SELECT * FROM projects WHERE project_status = %s AND userid = %s"""
-    sql_value = (project_status, userid)
+    sql_value = (project_status, userid,)
     #query = ("SELECT * FROM projects WHERE project_status = \"" + 
     #    project_status + "\" AND userid = \"" + userid + "\"")
     try:
@@ -254,7 +254,7 @@ def get_projects_by_participant_and_status(userid, project_status):
     cursor = db.cursor()
     sql_cmd = """SELECT * FROM projects, projects_users WHERE projects.project_status = %s \ 
     AND projects_users.userid = %s AND projects_users.projectid = projects.projectid"""
-    sql_value = (project_status, userid)
+    sql_value = (project_status, userid,)
     #query = ("SELECT * FROM projects, projects_users WHERE projects.project_status = \"" + 
     #    project_status + "\" AND projects_users.userid = \"" + userid + 
     #    "\" AND projects_users.projectid = projects.projectid")
@@ -289,7 +289,7 @@ def set_task(projectid, task_title, task_description, budget):
     db.connect()
     cursor = db.cursor()
     sql_cmd = """INSERT INTO tasks (projectid, title, task_description, budget, task_status) VALUES (%s, %s, %s, %s, "waiting for delivery")"""
-    sql_value = (projectid, task_title, task_description, budget)
+    sql_value = (projectid, task_title, task_description, budget,)
     #query = ("INSERT INTO tasks (projectid, title, task_description, budget, task_status) VALUES (\"" +
     #    projectid + "\", \"" + task_title + "\", \"" +
     #    task_description + "\", \"" + budget + "\", \"waiting for delivery\")")
@@ -309,7 +309,7 @@ def update_task_status(taskid, status):
     db.connect()
     cursor = db.cursor()
     sql_cmd = """UPDATE tasks SET task_status = %s WHERE taskid = %s"""
-    sql_value = (status, taskid)
+    sql_value = (status, taskid,)
     #query = ("UPDATE tasks SET task_status = \"" + status + 
     #    "\" WHERE taskid = \"" + taskid + "\"")
     try:
@@ -336,7 +336,7 @@ def get_tasks_by_project_id(projectid):
     cursor = db.cursor()
 
     sql_cmd = """SELECT * FROM tasks WHERE projectid = %s"""
-    sql_value = (projectid)
+    sql_value = (projectid,)
     #query = ("SELECT * FROM tasks WHERE projectid = \"" + projectid + "\"")
     try:
         cursor.execute(sql_cmd, sql_value)
@@ -364,7 +364,7 @@ def set_task_file(taskid, filename):
     db.connect()
     cursor = db.cursor()
     sql_cmd = """INSERT INTO task_files (taskid, filename) VALUES (%s, %s)"""
-    sql_value = (taskid, filename)
+    sql_value = (taskid, filename,)
     #query = ("INSERT INTO task_files (taskid, filename) VALUES (\"" + 
     #    taskid + "\", \"" + filename + "\")")
     try:
@@ -389,7 +389,7 @@ def get_task_files(taskid):
     db.connect()
     cursor = db.cursor()
     sql_cmd = """SELECT filename FROM task_files WHERE taskid = %s"""
-    sql_value = (str(taskid))
+    sql_value = (str(taskid),)
     #query = ("SELECT filename FROM task_files WHERE taskid = \"" + str(taskid) + "\"")
     try:
         cursor.execute(sql_cmd, sql_value)
@@ -423,7 +423,7 @@ def set_projects_user(projectid, userid, read_permission="TRUE",
     cursor = db.cursor()
     sql_cmd = """INSERT INTO projects_users VALUES (%s, %s, %s, %s, %s)"""
     sql_value = (projectid, userid, read_permission, 
-                 write_permission, read_permission, write_permission, modify_permission)
+                 write_permission, read_permission, write_permission, modify_permission,)
     #query = ("INSERT INTO projects_users VALUES (\"" + projectid + "\", \"" + 
     #    userid + "\", " + read_permission + ", " + 
     #    write_permission + ", " + modify_permission + ")")

@@ -30,9 +30,9 @@ def set_user(username, password, full_name, company, email,
     db.connect()
     cursor = db.cursor()
     sql_cmd = """INSERT INTO users VALUES (NULL, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"""
-    sql_value = (username, password, full_name, company, 
-                 email, street_address, city, 
-                 state, postal_code, country)
+    sql_value = (username, password, full_name, company, \
+                 email, street_address, city, \
+                 state, postal_code, country,)
     #query = ("INSERT INTO users VALUES (NULL, \"" + username + "\", \"" + 
     #    password + "\", \"" + full_name + "\" , \"" + company + "\", \"" + 
     #    email + "\", \"" + street_address + "\", \"" + city + "\", \"" + 

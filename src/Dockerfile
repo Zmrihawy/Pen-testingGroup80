@@ -10,11 +10,11 @@ RUN echo ${groupid} > /app/models/.env
 WORKDIR /app
 ENV PYTHONPATH=/app
 
-# Install python dependencies
-RUN pip install --no-cache-dir -r requirements.txt
-
 # update pip
 RUN pip install --upgrade pip
+
+# Install python dependencies
+RUN pip install --no-cache-dir -r requirements.txt
 
 # Move the base entrypoint to reuse it
 RUN mv /entrypoint.sh /uwsgi-nginx-entrypoint.sh
