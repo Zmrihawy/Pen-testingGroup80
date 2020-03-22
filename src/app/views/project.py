@@ -2,8 +2,9 @@ import web
 import models.project
 from views.utils import get_nav_bar
 from views.forms import project_form
-import os
+import os, os.path
 from time import sleep
+import hashlib
 
 # Get html templates
 render = web.template.render('templates/')
@@ -44,9 +45,13 @@ class Project:
     def POST(self):
         # Get session
         session = web.ctx.session
+        # Get data when user press "Create Project" button
         data = web.input(myfile={}, deliver=None, accepted=None, declined=None, projectid=0)
+        
+        # file itself
         fileitem = data['myfile']
-                
+
+        #projects information
         permissions = models.project.get_user_permissions(str(session.userid), data.projectid)
         categories = models.project.get_categories()
         tasks = models.project.get_tasks_by_project_id(data.projectid)
@@ -57,23 +62,49 @@ class Project:
                 # Check if user has write permission
                 if not permissions[1]:
                     raise web.seeother(('/project?projectid=' + data.projectid))
+                #upload filname with basename, to avoid path travsal
+                fn = os.path.basename(fileitem.filename)
 
-                fn = fileitem.filename
                 # Create the project directory if it doesnt exist
+                # create a folder named project under static folder
                 path = 'static/project' + data.projectid
                 if not os.path.isdir(path):
                     command = 'mkdir ' + path
                     os.popen(command)
                     sleep(0.2)
+                
+                # create a folder called task
                 path = path + '/task' + data.taskid
                 if not os.path.isdir(path):
                     command = 'mkdir ' + path
                     os.popen(command)
                     sleep(0.2)
-                open(path + '/' + fn, 'wb').write(fileitem.file.read())
-                models.project.set_task_file(data.taskid, (path + "/" + fn))
+                
+                #check the filename suffix
+                fn.lower().endswith(('.txt', '.pdf'))
+                #extract file name itself
+                filename_no_extension = os.path.splitext(fn)[0]
+                #hash file name
+                hashed_fileanme = hashlib.md5(filename_no_extension.encode())
+                #create the file path
+                uploaded_file_path = os.path.join(path, "/", hashed_fileanme.hexdigest())
+                open(uploaded_file_path, 'wb').write(fileitem.file.read())
+                models.project.set_task_file(data.taskid, uploaded_file_path)
         except:
             # Throws exception if no file present
+            # Get session
+            session = web.ctx.session
+            # Get navbar
+            nav = get_nav_bar(session)
+            data = web.input(projectid=0)
+            if data.projectid:
+                project = models.project.get_project_by_id(data.projectid)
+                tasks = models.project.get_tasks_by_project_id(data.projectid)
+            else:
+                project = [[]]
+                tasks = [[]]
+            render = web.template.render('templates/', globals={'get_task_files':models.project.get_task_files, 'session':session})
+            return render.project(nav, project_form, project, tasks,permissions, categories,)
             pass
 
         # Determine status of the targeted task

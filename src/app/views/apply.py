@@ -84,24 +84,32 @@ class Apply:
             applicant = data["user_"+str(i)][1:][:-1].split(",")
             applicants.append([ int(applicant[0]), applicant[1][2:][:-1] ])
 
-            read, write, modify = "FALSE", "FALSE", "FALSE"
+            #read, write, modify = "FALSE", "FALSE", "FALSE"
+            #using mysql content place holder therefore no string allowed
+            read, write, modify = 0, 0, 0
             try:
                 data["read_permission_"+str(i)]
-                read = "TRUE"
+                #read = "TRUE"
+                read = 1
             except Exception as e:
-                read = "FALSE"
+                #read = "FALSE"
+                read = 0
                 pass
             try:
                 data["write_permission_"+str(i)]
-                write = "TRUE"
+                #write = "TRUE"
+                write = 1
             except Exception as e:
-                write = "FALSE"
+                #write = "FALSE"
+                write = 0
                 pass
             try:
                 data["modify_permission_"+str(i)]
-                modify = "TRUE"
+                #modify = "TRUE"
+                modify = 1
             except Exception as e:
-                modify = "FALSE"
+                #modify = "FALSE"
+                modify = 0
                 pass
             permissions.append([read, write, modify])
 
@@ -120,8 +128,8 @@ class Apply:
             new_applicant = [ int(user_id_to_add), user_name_to_add ]
             if new_applicant not in applicants:
                 applicants.append(new_applicant)
-                permissions.append(["TRUE", "FALSE", "FALSE"])
-
+                #permissions.append(["TRUE", "FALSE", "FALSE"])
+                permissions.append([1,0,0])
         return applicants, permissions
             
 

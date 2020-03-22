@@ -21,7 +21,7 @@ def log_error_msg (msg):
         handler_file.setFormatter(load_seted_format) 
         #assign one handler
         logger.addHandler(handler_file)
-        logger.log(logging.error, str(msg))
+        logger.log(logging.ERROR, str(msg))
         """
         handler = logging.handlers.WatchedFileHandler(
         os.environ.get("LOGFILE", "/var/log/mysql.log"))

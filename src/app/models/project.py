@@ -106,7 +106,7 @@ def update_project_status(projectid, status):
     """
     db.connect()
     cursor = db.cursor()
-    sql_cmd = """UPDATE projects SET project_status = %s WHERE porjectid = %s"""
+    sql_cmd = """UPDATE projects SET project_status = %s WHERE projectid = %s"""
     sql_value = (status, projectid,)
     #query = ("UPDATE projects SET project_status = \"" + status + 
     #    "\" WHERE projectid = \"" + projectid + "\"")
@@ -437,7 +437,7 @@ def set_projects_user(projectid, userid, read_permission="TRUE",
     cursor = db.cursor()
     sql_cmd = """INSERT INTO projects_users VALUES (%s, %s, %s, %s, %s)"""
     sql_value = (projectid, userid, read_permission, 
-                 write_permission, read_permission, write_permission, modify_permission,)
+                 write_permission, modify_permission,)
     #query = ("INSERT INTO projects_users VALUES (\"" + projectid + "\", \"" + 
     #    userid + "\", " + read_permission + ", " + 
     #    write_permission + ", " + modify_permission + ")")
@@ -446,7 +446,7 @@ def set_projects_user(projectid, userid, read_permission="TRUE",
         logger.log_input_msg("set_project_users: {}".format(sql_value))
         db.commit()
     except mysql.connector.Error as err:
-        logger.log_error_msg("Failed executing query: {}".format(err))
+        logger.log_error_msg("Failed executing query: {}, {}".format(err, sql_value))
         print("Failed executing query: {}".format(err))
         cursor.fetchall()
         exit(1)
