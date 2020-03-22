@@ -14,6 +14,8 @@ $def with (nav, project_form, project_buttons, messasge)
 
     <h2>Add project!</h2>
     <form method="POST">
+        <input type="hidden" name="csrf_token" value="$csrf_token()" />
+        
         <div>
             $:project_form.render()
         </div>

@@ -1,9 +1,11 @@
 import web
-from views.utils import get_nav_bar
+from views.utils import get_nav_bar, csrf
 
 # Get html templates
 render = web.template.render('templates/')
 
+# Set global token
+web.template.Template.globals['csrf_token'] = csrf
 
 class Logout:
 

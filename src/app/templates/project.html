@@ -37,6 +37,8 @@ $def with (nav, project_form, project, tasks, permissions, categories)
                             <a href="$filename[0]" download>$filename[0].split("/")[-1]</a>
                             <br>
                         <form method="POST" enctype="multipart/form-data" action="">
+                            <input type="hidden" name="csrf_token" value="$csrf_token()" />
+                            
                             $project_form.taskid.set_value(task[0])
                             $:project_form.taskid.render()
                             $if (task[5] == "waiting for delivery" or task[5] == "declined"):

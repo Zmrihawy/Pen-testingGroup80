@@ -1,6 +1,6 @@
 import web
 import models.project
-from views.utils import get_nav_bar
+from views.utils import get_nav_bar, csrf, csrf_decorate
 from views.forms import project_form
 import os
 from time import sleep
@@ -8,6 +8,8 @@ from time import sleep
 # Get html templates
 render = web.template.render('templates/')
 
+# Set global token
+web.template.Template.globals['csrf_token'] = csrf
 
 class Project:
 
@@ -41,6 +43,7 @@ class Project:
         render = web.template.render('templates/', globals={'get_task_files':models.project.get_task_files, 'session':session})
         return render.project(nav, project_form, project, tasks,permissions, categories)
 
+    @csrf_decorate
     def POST(self):
         # Get session
         session = web.ctx.session

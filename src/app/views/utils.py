@@ -1,3 +1,11 @@
+from binascii import hexlify, unhexlify
+from hashlib import pbkdf2_hmac
+import os
+import web
+import random, string
+
+SHA = 'sha256'
+SHA_VALUE = 100000
 
 def get_nav_bar(session):
     """
@@ -19,8 +27,7 @@ def get_nav_bar(session):
     result += ' </ul>'
     result += '</nav>'
     return result
-
-                        
+           
 def get_element_count(data, element):
     """
     Determine the number of tasks created by removing 
@@ -38,3 +45,19 @@ def get_element_count(data, element):
         except:
             break
     return task_count
+
+def csrf():
+    session = web.ctx.session
+    if not session.has_key('csrf_token'):
+        from uuid import uuid4
+        session.csrf_token = uuid4().hex
+    return session.csrf_token
+
+def csrf_decorate(f):
+    def csrf_base(*a, **k):
+        session = web.ctx.session
+        input = web.input()
+        if not (session.has_key('csrf_token') and input.csrf_token == session.pop('csrf_token', None)):
+            raise web.HTTPError("400 Bad request", {'content-type':'text/html'}, 'Request forgery!')
+        return f(*a,**k)
+    return csrf_base

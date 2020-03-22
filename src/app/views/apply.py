@@ -1,11 +1,14 @@
 import web
 import models.project
 from models.user import get_user_name_by_id
-from views.utils import get_nav_bar, get_element_count
+from views.utils import get_nav_bar, get_element_count, csrf, csrf_decorate
 from views.forms import get_apply_form, get_apply_permissions_form
 
 # Get html templates
 render = web.template.render('templates/')
+
+# Set global token
+web.template.Template.globals['csrf_token'] = csrf
 
 class Apply:
 
@@ -34,6 +37,7 @@ class Apply:
 
         return render.apply(nav, apply_form, get_apply_permissions_form, project, applicants, permissions)
 
+    @csrf_decorate
     def POST(self):
         """
         Post an application to the view, adding selected users to a project

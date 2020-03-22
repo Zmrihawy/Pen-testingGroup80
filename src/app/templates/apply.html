@@ -21,6 +21,8 @@ $def with (nav, apply_form, get_apply_permission_form, project, applicants, perm
         </div>
         
         <form method="POST">
+            <input type="hidden" name="csrf_token" value="$csrf_token()" />
+
             <h4>Add Users</h4>
             $:apply_form.render()
             <h4>Users to apply:</h4>

@@ -1,13 +1,15 @@
 import web
 from views.forms import login_form
 import models.user
-from views.utils import get_nav_bar
-import os, hmac, base64, pickle
+from views.utils import get_nav_bar, csrf, csrf_decorate
+import os, hmac, base64, json
 import hashlib
 
 # Get html templates
 render = web.template.render('templates/')
 
+# Set global token
+web.template.Template.globals['csrf_token'] = csrf
 
 class Login():
 
@@ -28,6 +30,7 @@ class Login():
 
         return render.login(nav, login_form, "")
 
+    @csrf_decorate
     def POST(self):
         """
         Log in to the web application and register the session
@@ -74,7 +77,7 @@ class Login():
             # Decode the hash
             decode = base64.b64decode(remember_hash)
             # Load the decoded hash to receive the host signature and the username
-            username, sign = pickle.loads(decode)
+            username, sign = json.loads(decode)
         except AttributeError as e:
             # The user did not have the stored remember me cookie
             pass
@@ -93,7 +96,7 @@ class Login():
         """
         session = web.ctx.session
         creds = [ session.username, self.sign_username(session.username) ]
-        return base64.b64encode(pickle.dumps(creds))
+        return base64.b64encode(json.dumps(creds))
 
     @classmethod
     def sign_username(self, username):
