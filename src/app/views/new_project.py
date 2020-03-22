@@ -3,10 +3,13 @@ from web import form
 from views.forms import get_task_form_elements, get_project_form_elements, get_user_form_elements, project_buttons
 import models.project
 import models.user
-from views.utils import get_nav_bar, get_element_count
+from views.utils import get_nav_bar, get_element_count, csrf, csrf_decorate
 
 # Get html templates
 render = web.template.render('templates/')
+
+# Set global token
+web.template.Template.globals['csrf_token'] = csrf
 
 class New_project:
 
@@ -26,6 +29,7 @@ class New_project:
         project_form = form.Form(*(project_form_elements + task_form_elements + user_form_elements))
         return render.new_project(nav, project_form, project_buttons,  "")
 
+    @csrf_decorate
     def POST(self):
         """
         Create a new project

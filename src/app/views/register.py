@@ -2,13 +2,15 @@ import web
 from views.forms import register_form
 import models.register
 import models.user
-from views.utils import get_nav_bar
+from views.utils import get_nav_bar, csrf, csrf_decorate
 import hashlib
 import re
 
 # Get html templates
 render = web.template.render('templates/')
 
+# Set global token
+web.template.Template.globals['csrf_token'] = csrf
 
 class Register:
 
@@ -22,6 +24,7 @@ class Register:
         nav = get_nav_bar(session)
         return render.register(nav, register_form, "")
 
+    @csrf_decorate
     def POST(self):
         """
         Handle input data and register new user in database
