@@ -39,6 +39,7 @@ def set_user(username, password, full_name, company, email,
     #    state  + "\", \"" + postal_code + "\", \"" + country + "\")")
     try:
         cursor.execute(sql_cmd, sql_value)
+        logger.log_input_msg("register: {}".format(sql_value))
         db.commit()
     except mysql.connector.Error as err:
         logger.log_error_msg(err)

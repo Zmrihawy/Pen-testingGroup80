@@ -12,9 +12,10 @@ def get_users():
     query = ("SELECT userid, username from users")
     try:
         cursor.execute(query)
+        #logger.log_input_msg("get_users: {}".format(query))
         users = cursor.fetchall()
     except mysql.connector.Error as err:
-        logger.log_error_msg(err)
+        logger.log_error_msg("Failed executing query: {}".format(err))
         print("Failed executing query: {}".format(err))
         users = []
         cursor.fetchall()
@@ -39,11 +40,12 @@ def get_user_id_by_name(username):
     userid = None
     try:
         cursor.execute(sql_cmd, sql_value)
+        logger.log_input_msg("get_user_id_by_name:{}".format(sql_value))
         users = cursor.fetchall()
         if(len(users)):
             userid = users[0][0]
     except mysql.connector.Error as err:
-        logger.log_error_msg(err)
+        logger.log_error_msg("Failed executing query: {}".format(err))
         print("Failed executing query: {}".format(err))
         cursor.fetchall()
         exit(1)
@@ -66,11 +68,12 @@ def get_user_name_by_id(userid):
     username = None
     try:
         cursor.execute(sql_cmd, sql_value)
+        logger.log_input_msg("get_user_name_by_id: {}".format(sql_value))
         users = cursor.fetchall()
         if len(users):
             username = users[0][0]
     except mysql.connector.Error as err:
-        logger.log_error_msg(err)
+        logger.log_error_msg("Failed executing query: {}".format(err))
         print("Failed executing query: {}".format(err))
         cursor.fetchall()
         exit(1)
@@ -98,11 +101,12 @@ def match_user(username, password):
     user = None
     try:
         cursor.execute(sql_cmd, sql_value)
+        logger.log_input_msg("match_user: {}".format(sql_value))
         users = cursor.fetchall()
         if len(users):
             user = users[0]
     except mysql.connector.Error as err:
-        logger.log_error_msg(err)
+        logger.log_error_msg("Failed executing query: {}".format(err))
         print("Failed executing query: {}".format(err))
         cursor.fetchall()
         exit(1)
