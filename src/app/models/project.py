@@ -13,6 +13,7 @@ def get_categories():
     query = ("SELECT * FROM project_category")
     try:
         cursor.execute(query)
+        logger.log_input_msg(query)
         categories = cursor.fetchall()
     except mysql.connector.Error as err:
         logger.log_error_msg(err)
