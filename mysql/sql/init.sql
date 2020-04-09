@@ -2,7 +2,7 @@
 CREATE TABLE users (
   userid INT UNSIGNED AUTO_INCREMENT,
   username VARCHAR(45) UNIQUE NOT NULL,
-  password VARCHAR(45) NOT NULL,
+  password VARCHAR(1000) NOT NULL,
   full_name VARCHAR(200) NOT NULL,
   company VARCHAR(50),
   email VARCHAR(50) NOT NULL,
@@ -76,7 +76,7 @@ CREATE TABLE task_files (
 * Initial data
 */
 
-insert into users values (NULL, "admin", "48bead1bb864138c2cafaf1bd41332ab", "Admin Modsen", "ntnu", 'mail@ntnu.no', "street", "trondheim", "trondheim", "1234", "norway");
+/*insert into users values (NULL, "admin", "48bead1bb864138c2cafaf1bd41332ab", "Admin Modsen", "ntnu", 'mail@ntnu.no', "street", "trondheim", "trondheim", "1234", "norway");*/
 
 insert into project_category values (NULL, "Gardening");
 insert into project_category values (NULL, "Programming");

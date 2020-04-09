@@ -3,7 +3,7 @@ from views.forms import login_form
 import models.user
 from views.utils import get_nav_bar, csrf, csrf_decorate
 import os, hmac, base64, json
-import hashlib
+import hashlib, binascii
 
 # Get html templates
 render = web.template.render('templates/')
@@ -35,21 +35,45 @@ class Login():
         """
         Log in to the web application and register the session
             :return:  The login page showing other users if logged in
+        reference: https://www.vitoshacademy.com/hashing-passwords-in-python/
         """
         session = web.ctx.session
         nav = get_nav_bar(session)
         data = web.input(username="", password="", remember=False)
-
-        # Validate login credential with database query
-        password_hash = hashlib.md5(b'TDT4237' + data.password.encode('utf-8')).hexdigest()
-        user = models.user.match_user(data.username, password_hash)
         
-        # If there is a matching user/password in the database the user is logged in
-        if user:
-            self.login(user[1], user[0], data.remember)
-            raise web.seeother("/")
-        else:
-            return render.login(nav, login_form, "- User authentication failed")
+        try:
+            #get user's salt and password
+            stored_password = models.user.get_user_hashed_password(data.username)
+            # get salt value, type<str>
+            salt = stored_password[:64]
+            password = stored_password[64:]
+            # Validate login credential
+            hashed_password = hashlib.pbkdf2_hmac(
+                'sha512', #using sha 256 algorithm
+                data.password.encode('utf-8'), #endcoded with utf8
+                salt.encode('ascii'), # adding salt
+                100000# set the iteration time 10000
+                )
+            
+            hashed_password = binascii.hexlify(hashed_password).decode('ascii')
+            
+            test_password = (salt + hashed_password)
+            print(test_password == stored_password)
+            #match with database
+            #password_hash = hashlib.md5(b'TDT4237' + data.password.encode('utf-8')).hexdigest()
+            
+             # If there is a matching user/password in the database the user is logged in
+            if hashed_password == password:
+                user = models.user.match_user(data.username, test_password)
+                self.login(user[1], user[0], data.remember)
+                raise web.seeother("/")
+            else:
+                return render.login(nav, login_form, "- User authentication failed")
+        except:
+            return render.login(nav, login_form, "- Something went wrong!")
+        
+        
+       
 
     def login(self, username, userid, remember):
         """

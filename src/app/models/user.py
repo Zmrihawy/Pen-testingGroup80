@@ -94,6 +94,7 @@ def match_user(username, password):
     """
     db.connect()
     cursor = db.cursor()
+     
     sql_cmd = """SELECT userid, username from users where username = %s AND password = %s"""
     sql_value = (username, password,)
     #query = ("SELECT userid, username from users where username = \"" + username + 
@@ -114,3 +115,33 @@ def match_user(username, password):
         cursor.close()
         db.close()
     return user
+
+def get_user_hashed_password(username):
+    """
+    Check if user hashed password is match with database
+    Need to retreive salt value
+        :param username: The user attempting to authenticate
+        :type username: str
+        :return: salt (byte)
+    """
+
+    db.connect()
+    cursor = db.cursor()
+    sql_cmd = """SELECT password FROM users WHERE username = %s"""
+    sql_value = (username,)
+
+    try:
+        cursor.execute(sql_cmd, sql_value)
+        logger.log_input_msg("get_user_hashed_password: {}".format(sql_value))
+        password = cursor.fetchall()
+        if len(password):
+            password_return = password[0][0]
+    except mysql.connector.Error as err:
+        logger.log_error_msg("Failed executing query: {}".format(err))
+        print("Failed executing query: {}".format(err))
+        cursor.fetchall()
+        exit(1)
+    finally:
+        cursor.close()
+        db.close()
+    return password_return

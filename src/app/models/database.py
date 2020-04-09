@@ -19,7 +19,6 @@ db = mysql.connector.connect(
     host='10.' + groupid + '.0.5',   # Docker address
     #host='0.0.0.0',    # Local address
     database='db',
-    charset = 'utf8',
     auth_plugin='mysql_native_password'
 )
     
