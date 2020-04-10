@@ -1,4 +1,6 @@
-FROM tiangolo/uwsgi-nginx:python3.7
+# get the latest verison
+# reference: https://hub.docker.com/layers/tiangolo/uwsgi-nginx/latest/images/sha256-732a9257e0a80b029eca8462b46731e925a35ce917dccde6b1a8263d6c033fb0?context=explore
+FROM tiangolo/uwsgi-nginx:latest
 
 # Expose the web-server local port
 ENV LISTEN_PORT 8080
