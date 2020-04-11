@@ -1,6 +1,7 @@
 from models.database import db
 import mysql.connector
 import models.logger as logger
+import datetime
 
 def set_user(username, password, full_name, company, email, 
         street_address, city, state, postal_code, country, ip, path):
@@ -29,10 +30,11 @@ def set_user(username, password, full_name, company, email,
     """
     db.connect()
     cursor = db.cursor(prepared=True)
-    sql_cmd = """INSERT INTO users VALUES (NULL, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"""
+    current_time = datetime.datetime.today().strftime('%Y-%m-%d')
+    sql_cmd = """INSERT INTO users VALUES (NULL, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"""
     sql_value = (username, password, full_name, company,
                  email, street_address, city,
-                 state, postal_code, country,)
+                 state, postal_code, country,current_time,)
     #query = ("INSERT INTO users VALUES (NULL, \"" + username + "\", \"" + 
     #    password + "\", \"" + full_name + "\" , \"" + company + "\", \"" + 
     #    email + "\", \"" + street_address + "\", \"" + city + "\", \"" + 
@@ -43,7 +45,7 @@ def set_user(username, password, full_name, company, email,
         db.commit()
     except mysql.connector.Error as err:
         logger.log_error_msg(err)
-        print("Failed executing query: {}".format(err))
+        print("Failed executing query register-set_user: {}".format(err))
         cursor.fetchall()
         exit(1)
     finally:
