@@ -16,7 +16,7 @@ def get_categories():
         logger.log_input_msg("project.py>>get_categories:{}".format(query))
         categories = cursor.fetchall()
     except mysql.connector.Error as err:
-        logger.log_error_msg("Failed executing query: {}".format(err))
+        logger.log_error_msg("Failed executing query project.py>>get_categories: {}".format(err))
         print("Failed executing query: {}".format(err))
         categories = []
         cursor.fetchall()
@@ -58,7 +58,7 @@ def set_project(categoryid, userid, project_title, project_description, project_
         users_projects = get_projects_by_owner(userid) 
         projectid = users_projects[-1][0]
     except mysql.connector.Error as err:
-        logger.log_error_msg("Failed executing query: {}".format(err))
+        logger.log_error_msg("Failed executing query set_porject_input: {}".format(err))
         print("Failed executing query: {}".format(err))
         projectid = None
         cursor.fetchall()
@@ -86,7 +86,7 @@ def get_project_by_id(projectid):
         logger.log_input_msg("get_project_id input: {}".format(sql_value))
         project = cursor.fetchall()
     except mysql.connector.Error as err:
-        logger.log_error_msg("Failed executing query: {}".format(err))
+        logger.log_error_msg("Failed executing query get_project_by_id: {}".format(err))
         print("Failed executing query: {}".format(err))
         project = []
         cursor.fetchall()
@@ -115,7 +115,7 @@ def update_project_status(projectid, status):
         logger.log_input_msg("update_project_status_input: {}".format(sql_value))
         db.commit()
     except mysql.connector.Error as err:
-        logger.log_error_msg("Failed executing query: {}".format(err))
+        logger.log_error_msg("Failed executing query update_project_status: {}".format(err))
         print("Failed executing query: {}".format(err))
         cursor.fetchall()
         exit(1)
@@ -146,7 +146,7 @@ def get_user_permissions(userid, projectid):
         logger.log_input_msg("get_user_permissions: {}".format(sql_value))
         permissions = cursor.fetchall()
     except mysql.connector.Error as err:
-        logger.log_error_msg("Failed executing query: {}".format(err))
+        logger.log_error_msg("Failed executing query get_user_permissions: {}".format(err))
         print("Failed executing query: {}".format(err))
         cursor.fetchall()
         exit(1)
@@ -178,7 +178,7 @@ def get_projects_by_status_and_category(categoryid, project_status):
         logger.log_input_msg("get_project_id_by_status_and_category: {}".format(sql_value))
         projects = cursor.fetchall()
     except mysql.connector.Error as err:
-        logger.log_error_msg("Failed executing query: {}".format(err))
+        logger.log_error_msg("Failed executing query get_projects_by_status_and_category: {}".format(err))
         print("Failed executing query: {}".format(err))
         projects = []
         cursor.fetchall()
@@ -206,7 +206,7 @@ def get_projects_by_owner(userid):
         logger.log_input_msg("get_project_by_owner: {}".format(sql_value))
         projects = cursor.fetchall()
     except mysql.connector.Error as err:
-        logger.log_error_msg("Failed executing query: {}".format(err))
+        logger.log_error_msg("Failed executing query get_projects_by_owner: {}".format(err))
         print("Failed executing query: {}".format(err))
         projects = []
         cursor.fetchall()
@@ -238,7 +238,7 @@ def get_projects_by_status_and_owner(userid, project_status):
         logger.log_input_msg("get_projects_by_status_and_owner: {}".format(sql_value))
         projects = cursor.fetchall()
     except mysql.connector.Error as err:
-        logger.log_error_msg("Failed executing query: {}".format(err))
+        logger.log_error_msg("Failed executing query get_projects_by_status_and_owner: {}".format(err))
         print("Failed executing query: {}".format(err))
         projects = []
         cursor.fetchall()
@@ -272,7 +272,7 @@ def get_projects_by_participant_and_status(userid, project_status):
         logger.log_input_msg("get_projects_by_participant_and_status: {}".format(sql_value))
         projects = cursor.fetchall()
     except mysql.connector.Error as err:
-        logger.log_error_msg("Failed executing query: {}".format(err))
+        logger.log_error_msg("Failed executing query get_projects_by_participant_and_status: {}".format(err))
         print("Failed executing query: {}".format(err))
         projects = []
         cursor.fetchall()
@@ -307,7 +307,7 @@ def set_task(projectid, task_title, task_description, budget):
         logger.log_input_msg("set_task: {}".format(sql_value))
         db.commit()
     except mysql.connector.Error as err:
-        logger.log_error_msg("Failed executing query: {}".format(err))
+        logger.log_error_msg("Failed executing query set_task: {}".format(err))
         print("Failed executing query: {}".format(err))
         cursor.fetchall()
         exit(1)
@@ -327,7 +327,7 @@ def update_task_status(taskid, status):
         logger.log_input_msg("update_task_status: {}".format(sql_value))
         db.commit()
     except mysql.connector.Error as err:
-        logger.log_error_msg("Failed executing query: {}".format(err))
+        logger.log_error_msg("Failed executing query update_task_status: {}".format(err))
         print("Failed executing query: {}".format(err))
         cursor.fetchall()
         exit(1)
@@ -354,7 +354,7 @@ def get_tasks_by_project_id(projectid):
         logger.log_input_msg("get_task_by_project_id: {}".format(sql_value))
         tasks = cursor.fetchall()
     except mysql.connector.Error as err:
-        logger.log_error_msg("Failed executing query: {}".format(err))
+        logger.log_error_msg("Failed executing query get_tasks_by_project_id: {}".format(err))
         print("Failed executing query: {}".format(err))
         tasks = []
         cursor.fetchall()
@@ -384,7 +384,7 @@ def set_task_file(taskid, filename):
         logger.log_input_msg("set_task_file: {}".format(sql_value))
         db.commit()
     except mysql.connector.Error as err:
-        logger.log_error_msg("Failed executing query: {}".format(err))
+        logger.log_error_msg("Failed executing query set_task_file: {}".format(err))
         print("Failed executing query: {}".format(err))
         cursor.fetchall()
         exit(1)
@@ -409,7 +409,7 @@ def get_task_files(taskid):
         logger.log_input_msg("get_task_file: {}".format(sql_value))
         filenames = cursor.fetchall()
     except mysql.connector.Error as err:
-        logger.log_error_msg("Failed executing query: {}".format(err))
+        logger.log_error_msg("Failed executing query get_task_files: {}".format(err))
         print("Failed executing query: {}".format(err))
         filenames = []
         cursor.fetchall()
@@ -446,7 +446,7 @@ def set_projects_user(projectid, userid, read_permission="TRUE",
         logger.log_input_msg("set_project_users: {}".format(sql_value))
         db.commit()
     except mysql.connector.Error as err:
-        logger.log_error_msg("Failed executing query: {}, {}".format(err, sql_value))
+        logger.log_error_msg("Failed executing query set_project_users: {}, {}".format(err, sql_value))
         print("Failed executing query: {}".format(err))
         cursor.fetchall()
         exit(1)

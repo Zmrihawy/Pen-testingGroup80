@@ -11,6 +11,7 @@ CREATE TABLE users (
   state VARCHAR(50),
   postal_code VARCHAR(50),
   country VARCHAR(50),
+  create_date DATE,
   PRIMARY KEY (userid)
 );
 
@@ -71,7 +72,13 @@ CREATE TABLE task_files (
   FOREIGN KEY (taskid) REFERENCES tasks(taskid)
 );
 
-
+CREATE TABLE user_access_time(
+  event_ID INT NOT NULL AUTO_INCREMENT,
+  username VARCHAR(45) NOT NULL,
+  msg VARCHAR(500),
+  access_time DATETIME,
+  PRIMARY KEY (event_ID)
+);
 /*
 * Initial data
 */
