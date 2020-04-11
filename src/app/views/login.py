@@ -42,8 +42,12 @@ class Login():
         data = web.input(username="", password="", remember=False)
         
         try:
+            # log ip information
+            ip_addr = web.ctx["ip"]
+            accessed_path = web.ctx["fullpath"]
             #get user's salt and password
-            stored_password = models.user.get_user_hashed_password(data.username)
+            stored_password = models.user.get_user_hashed_password(data.username, ip_addr, accessed_path)
+            
             # get salt value, type<str>
             salt = stored_password[:64]
             password = stored_password[64:]
@@ -58,13 +62,14 @@ class Login():
             hashed_password = binascii.hexlify(hashed_password).decode('ascii')
             
             test_password = (salt + hashed_password)
-            print(test_password == stored_password)
+            
             #match with database
             #password_hash = hashlib.md5(b'TDT4237' + data.password.encode('utf-8')).hexdigest()
             
              # If there is a matching user/password in the database the user is logged in
             if hashed_password == password:
-                user = models.user.match_user(data.username, test_password)
+                
+                user = models.user.match_user(data.username, test_password, ip_addr, accessed_path)
                 self.login(user[1], user[0], data.remember)
                 raise web.seeother("/")
             else:

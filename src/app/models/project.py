@@ -9,7 +9,7 @@ def get_categories():
         :return: List of categories
     """
     db.connect()
-    cursor = db.cursor()
+    cursor = db.cursor(prepared=True)
     query = ("SELECT * FROM project_category")
     try:
         cursor.execute(query)
@@ -45,7 +45,7 @@ def set_project(categoryid, userid, project_title, project_description, project_
      #using mysql placeholder
     # reference: https://pymysql.readthedocs.io/en/latest/user/examples.html
     db.connect()
-    cursor = db.cursor()
+    cursor = db.cursor(prepared=True)
     sql_cmd = "INSERT INTO projects VALUES (NULL, %s, %s, %s, %s, %s)"
     sql_value = (categoryid, userid, project_title, project_description, project_status,)
     #query = ("INSERT INTO projects VALUES (NULL, \"" + 
@@ -77,7 +77,7 @@ def get_project_by_id(projectid):
         :return: The selected project
     """
     db.connect()
-    cursor = db.cursor()
+    cursor = db.cursor(prepared=True)
     sql_cmd = """SELECT * FROM projects WHERE projectid = %s"""
     sql_value = (projectid,)
     #query = ("SELECT * FROM projects WHERE projectid = \"" + projectid + "\"")
@@ -105,7 +105,7 @@ def update_project_status(projectid, status):
         :type status: str
     """
     db.connect()
-    cursor = db.cursor()
+    cursor = db.cursor(prepared=True)
     sql_cmd = """UPDATE projects SET project_status = %s WHERE projectid = %s"""
     sql_value = (status, projectid,)
     #query = ("UPDATE projects SET project_status = \"" + status + 
@@ -133,7 +133,7 @@ def get_user_permissions(userid, projectid):
         :return: Permissions as an array of numbers as boolean values
     """
     db.connect()
-    cursor = db.cursor()
+    cursor = db.cursor(prepared=True)
 
     sql_cmd = """SELECT read_permission, write_permission, modify_permission FROM projects_users\
         WHERE projectid = %s AND userid = %s"""
@@ -168,7 +168,7 @@ def get_projects_by_status_and_category(categoryid, project_status):
         :return: A list of projects
     """
     db.connect()
-    cursor = db.cursor()
+    cursor = db.cursor(prepared=True)
     sql_cmd = """SELECT * FROM projects WHERE project_status = %s AND categoryid = %s """
     sql_value = (project_status, categoryid,)
     #query = ("SELECT * FROM projects WHERE project_status = \"" + 
@@ -196,7 +196,7 @@ def get_projects_by_owner(userid):
         :return: An array of projects
     """
     db.connect()
-    cursor = db.cursor()
+    cursor = db.cursor(prepared=True)
 
     sql_cmd = """SELECT * FROM projects WHERE userid = %s"""
     sql_value = (userid,)
@@ -227,7 +227,7 @@ def get_projects_by_status_and_owner(userid, project_status):
         :return: A list of projects
     """
     db.connect()
-    cursor = db.cursor()
+    cursor = db.cursor(prepared=True)
 
     sql_cmd = """SELECT * FROM projects WHERE project_status = %s AND userid = %s"""
     sql_value = (project_status, userid,)
@@ -259,7 +259,7 @@ def get_projects_by_participant_and_status(userid, project_status):
         :return: A list of projects
     """
     db.connect()
-    cursor = db.cursor()
+    cursor = db.cursor(prepared=True)
     sql_cmd = """SELECT * FROM projects, projects_users WHERE projects.project_status = %s 
                     AND projects_users.userid = %s AND projects_users.projectid = projects.projectid"""
     sql_value = (project_status, userid,)
@@ -296,7 +296,7 @@ def set_task(projectid, task_title, task_description, budget):
         :type budget: str
     """
     db.connect()
-    cursor = db.cursor()
+    cursor = db.cursor(prepared=True)
     sql_cmd = """INSERT INTO tasks (projectid, title, task_description, budget, task_status) VALUES (%s, %s, %s, %s, "waiting for delivery")"""
     sql_value = (projectid, task_title, task_description, budget,)
     #query = ("INSERT INTO tasks (projectid, title, task_description, budget, task_status) VALUES (\"" +
@@ -317,7 +317,7 @@ def set_task(projectid, task_title, task_description, budget):
         
 def update_task_status(taskid, status):
     db.connect()
-    cursor = db.cursor()
+    cursor = db.cursor(prepared=True)
     sql_cmd = """UPDATE tasks SET task_status = %s WHERE taskid = %s"""
     sql_value = (status, taskid,)
     #query = ("UPDATE tasks SET task_status = \"" + status + 
@@ -344,7 +344,7 @@ def get_tasks_by_project_id(projectid):
         :return: List of tasks
     """
     db.connect()
-    cursor = db.cursor()
+    cursor = db.cursor(prepared=True)
 
     sql_cmd = """SELECT * FROM tasks WHERE projectid = %s"""
     sql_value = (projectid,)
@@ -374,7 +374,7 @@ def set_task_file(taskid, filename):
         :type filename: str
     """
     db.connect()
-    cursor = db.cursor()
+    cursor = db.cursor(prepared=True)
     sql_cmd = """INSERT INTO task_files (taskid, filename) VALUES (%s, %s)"""
     sql_value = (taskid, filename,)
     #query = ("INSERT INTO task_files (taskid, filename) VALUES (\"" + 
@@ -400,7 +400,7 @@ def get_task_files(taskid):
         :return: An array of filenames
     """
     db.connect()
-    cursor = db.cursor()
+    cursor = db.cursor(prepared=True)
     sql_cmd = """SELECT filename FROM task_files WHERE taskid = %s"""
     sql_value = (str(taskid),)
     #query = ("SELECT filename FROM task_files WHERE taskid = \"" + str(taskid) + "\"")
@@ -434,7 +434,7 @@ def set_projects_user(projectid, userid, read_permission="TRUE",
         :type write_permission: str
     """
     db.connect()
-    cursor = db.cursor()
+    cursor = db.cursor(prepared=True)
     sql_cmd = """INSERT INTO projects_users VALUES (%s, %s, %s, %s, %s)"""
     sql_value = (projectid, userid, read_permission, 
                  write_permission, modify_permission,)

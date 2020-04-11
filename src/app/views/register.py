@@ -50,7 +50,8 @@ class Register:
             Using salt to protect user's password
             And write in database.
             """
-            
+            ip_addr = web.ctx["ip"]
+            path = web.ctx["fullpath"]
             # Gererate salt
             # reference: https://stackoverflow.com/questions/17958347/how-can-i-convert-a-python-urandom-to-a-string
             # reference: https://www.vitoshacademy.com/hashing-passwords-in-python/
@@ -67,7 +68,7 @@ class Register:
             
             # write into database
             models.register.set_user(data.username, password, data.full_name, data.company, data.email, data.street_address,
-            data.city, data.state, data.postal_code, data.country)
+            data.city, data.state, data.postal_code, data.country, ip_addr, path)
             return render.register(nav, register_form, "User registered!")
         except:
             print(exit[0])

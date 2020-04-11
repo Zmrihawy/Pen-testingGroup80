@@ -3,7 +3,7 @@ import mysql.connector
 import models.logger as logger
 
 def set_user(username, password, full_name, company, email, 
-        street_address, city, state, postal_code, country):
+        street_address, city, state, postal_code, country, ip, path):
     """
     Register a new user in the database
         :param username: The users unique user name
@@ -28,7 +28,7 @@ def set_user(username, password, full_name, company, email,
         :type country: str
     """
     db.connect()
-    cursor = db.cursor()
+    cursor = db.cursor(prepared=True)
     sql_cmd = """INSERT INTO users VALUES (NULL, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"""
     sql_value = (username, password, full_name, company,
                  email, street_address, city,
@@ -39,7 +39,7 @@ def set_user(username, password, full_name, company, email,
     #    state  + "\", \"" + postal_code + "\", \"" + country + "\")")
     try:
         cursor.execute(sql_cmd, sql_value)
-        logger.log_input_msg("register: {}".format(sql_value))
+        logger.log_input_msg("register:IP:{}-{}-{}".format(ip, path, sql_value))
         db.commit()
     except mysql.connector.Error as err:
         logger.log_error_msg(err)

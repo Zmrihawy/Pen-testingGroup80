@@ -8,7 +8,7 @@ def get_users():
         :return: users
     """
     db.connect()
-    cursor = db.cursor()
+    cursor = db.cursor(prepared=True)
     query = ("SELECT userid, username from users")
     try:
         cursor.execute(query)
@@ -32,12 +32,12 @@ def get_user_id_by_name(username):
         :return: The id of the user
     """
     db.connect()
-    cursor = db.cursor()
+    cursor = db.cursor(prepared=True)
     sql_cmd = """SELECT userid from users WHERE username = %s"""
     sql_value = (username,)
     #query = ("SELECT userid from users WHERE username =\"" + username + "\"")
-    
     userid = None
+
     try:
         cursor.execute(sql_cmd, sql_value)
         logger.log_input_msg("get_user_id_by_name:{}".format(sql_value))
@@ -61,7 +61,7 @@ def get_user_name_by_id(userid):
         :return: The name of the user
     """
     db.connect()
-    cursor = db.cursor()
+    cursor = db.cursor(prepared=True)
     sql_cmd = """SELECT username from users WHERE userid = %s"""
     sql_value = (userid,)
     #query = ("SELECT username from users WHERE userid =\"" + userid + "\"")
@@ -82,7 +82,7 @@ def get_user_name_by_id(userid):
         db.close()
     return username
 
-def match_user(username, password):
+def match_user(username, password, ip, fullpath):
     """
     Check if user credentials are correct, return if exists
 
@@ -93,7 +93,7 @@ def match_user(username, password):
         :return: user
     """
     db.connect()
-    cursor = db.cursor()
+    cursor = db.cursor(prepared=True)
      
     sql_cmd = """SELECT userid, username from users where username = %s AND password = %s"""
     sql_value = (username, password,)
@@ -102,7 +102,7 @@ def match_user(username, password):
     user = None
     try:
         cursor.execute(sql_cmd, sql_value)
-        logger.log_input_msg("match_user: {}".format(sql_value))
+        logger.log_input_msg("A user success log in-match_user:{}-{}-{}".format(ip, fullpath, sql_value))
         users = cursor.fetchall()
         if len(users):
             user = users[0]
@@ -116,7 +116,7 @@ def match_user(username, password):
         db.close()
     return user
 
-def get_user_hashed_password(username):
+def get_user_hashed_password(username, ip, fullpath):
     """
     Check if user hashed password is match with database
     Need to retreive salt value
@@ -126,13 +126,13 @@ def get_user_hashed_password(username):
     """
 
     db.connect()
-    cursor = db.cursor()
+    cursor = db.cursor(prepared=True)
     sql_cmd = """SELECT password FROM users WHERE username = %s"""
     sql_value = (username,)
 
     try:
         cursor.execute(sql_cmd, sql_value)
-        logger.log_input_msg("get_user_hashed_password: {}".format(sql_value))
+        logger.log_input_msg("A user attempt:IP:{}-{}-{}".format(ip, fullpath, sql_value))
         password = cursor.fetchall()
         if len(password):
             password_return = password[0][0]
