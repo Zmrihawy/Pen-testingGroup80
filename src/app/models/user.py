@@ -171,7 +171,7 @@ def get_qurery_frequency(username, ip, fullpath):
         logger.log_input_msg("A attemp to access a user account-get_qurery_frequency:{}-{}-{}".format(ip, fullpath, sql_value))
         cursor.execute(sql_cmd, sql_value)
         result = cursor.fetchall()
-        print("query_result: {}".format(result))
+        #print("query_result: {}".format(result))
         count_access_time = int(len(result))
     except mysql.connector.Error as err:
         logger.log_error_msg("Failed executing query get_qurery_frequency: {}".format(err))
