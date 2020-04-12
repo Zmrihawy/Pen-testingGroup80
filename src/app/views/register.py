@@ -2,8 +2,7 @@ import web
 from views.forms import register_form
 import models.register
 import models.user
-from views.utils import get_nav_bar, csrf, csrf_decorate
-import hashlib, binascii
+from views.utils import get_nav_bar, csrf, csrf_decorate, generate_salt, hashed_value
 import os
 
 # Get html templates
@@ -52,19 +51,13 @@ class Register:
             """
             ip_addr = web.ctx["ip"]
             path = web.ctx["fullpath"]
-            # Gererate salt
-            # reference: https://stackoverflow.com/questions/17958347/how-can-i-convert-a-python-urandom-to-a-string
-            # reference: https://www.vitoshacademy.com/hashing-passwords-in-python/
-            salt = hashlib.sha256(os.urandom(60)).hexdigest().encode('ascii')
+            # generate salt value
+            salt = generate_salt()
             # protect password with sha 256
-            hashed_password = hashlib.pbkdf2_hmac(
-                'sha512', #using sha 256 algorithm
-                data.password.encode('utf-8'), #endcoded with utf8
-                salt, # adding salt
-                100000 # set the iteration time 10000
-                )
-            hashed_password = binascii.hexlify(hashed_password)
-            password = (salt+hashed_password).decode('ascii')
+            hashed_password = hashed_value(data.password, salt)
+
+            # generate salted password string
+            password = (salt+hashed_password)
             
             # write into database
             models.register.set_user(data.username, password, data.full_name, data.company, data.email, data.street_address,

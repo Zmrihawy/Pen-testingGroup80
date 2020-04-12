@@ -1,9 +1,8 @@
 import web
 from views.forms import login_form
 import models.user
-from views.utils import get_nav_bar, csrf, csrf_decorate
+from views.utils import get_nav_bar, csrf, csrf_decorate, hashed_value
 import os, hmac, base64, json
-import hashlib, binascii
 import datetime, time
 from models.logger import record_user_login
 # Get html templates
@@ -11,7 +10,7 @@ render = web.template.render('templates/')
 
 # Set global token
 web.template.Template.globals['csrf_token'] = csrf
-count = 0
+
 class Login():
 
     # Get the server secret to perform signatures
@@ -62,29 +61,26 @@ class Login():
                 # get salt value, type<str>
                 salt = stored_password[:64]
                 password = stored_password[64:]
+                
                 # Validate login credential
-                hashed_password = hashlib.pbkdf2_hmac(
-                    'sha512', #using sha 256 algorithm
-                    data.password.encode('utf-8'), #endcoded with utf8
-                    salt.encode('ascii'), # adding salt
-                    100000# set the iteration time 10000
-                    )
-            
-                hashed_password = binascii.hexlify(hashed_password).decode('ascii')
-            
-                test_password = (salt + hashed_password)
-                # look for the attemptions to try count
-                try_times = 0
+                hashed_password_validate = hashed_value(data.password, salt)
+                
+                test_password = (salt + hashed_password_validate)
+                
+                # If there is a matching user/password in the database the user is logged in
                 try_times = models.user.get_qurery_frequency(data.username, ip_addr, accessed_path)
+                try_times = 0
                 print(try_times)
-             # If there is a matching user/password in the database the user is logged in
-                if hashed_password == password:
+                
+                if hashed_password_validate == password:
+                    # look for the attemptions to try count
                     user = models.user.match_user(data.username, test_password, ip_addr, accessed_path)
                     self.login(user[1], user[0], data.remember)
                     raise web.seeother("/")
                 elif try_times < 3:
-                    count += 1
-                    return render.login(nav, login_form, "- Login Attemp {} time(s)".format(str(count)))
+                    return render.login(nav, login_form, "- Login Attemp {} time(s)".format(str(try_times)))
+                elif try_times >= 3:
+                    return render.login(nav, login_form, "- Invalid tryout, Resume login in 30 minuts")
                 else:
                     return render.login(nav, login_form, "- User authentication failed")
             else:

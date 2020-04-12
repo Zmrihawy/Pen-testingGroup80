@@ -1,5 +1,5 @@
 from binascii import hexlify, unhexlify
-from hashlib import pbkdf2_hmac
+from hashlib import pbkdf2_hmac, sha256
 import os
 import web
 import random, string
@@ -7,6 +7,7 @@ import random, string
 SHA = 'sha256'
 SHA_VALUE = 100000
 
+# Display accessable via web
 def get_nav_bar(session):
     """
     Generates the page nav bar
@@ -20,6 +21,7 @@ def get_nav_bar(session):
     if session.username:
         result += '    <li><a href="logout">Logout</a></li>'
         result += '    <li><a href="new_project">New</a></li>'
+        result += '    <li><a href="change_password">Change Password</a></li>'
     else:
         result += '    <li><a href="register">Register</a></li>'
         result += '    <li><a href="login">Login</a></li>'
@@ -61,3 +63,32 @@ def csrf_decorate(f):
             raise web.HTTPError("400 Bad request", {'content-type':'text/html'}, 'Request forgery!')
         return f(*a,**k)
     return csrf_base
+
+def generate_salt():
+    '''
+    Generate salt value for enhancing security purpose.    
+        :param None: None.
+        :return: The ascii coded salt value
+    reference: https://stackoverflow.com/questions/17958347/how-can-i-convert-a-python-urandom-to-a-string
+    reference: https://www.vitoshacademy.com/hashing-passwords-in-python/
+    '''
+    salt = sha256(os.urandom(60)).hexdigest()
+    return salt
+
+def hashed_value(raw_password, salt):
+    '''
+    Generate hashed password
+        :param data: The data object from web.input
+        :return: The number of tasks opened by the client
+    '''
+    hashed_password = pbkdf2_hmac(
+                    'sha512', #using sha 256 algorithm
+                    raw_password.encode('utf-8'), #endcoded with utf8
+                    salt.encode('ascii'), # adding salt
+                    100000# set the iteration time 10000
+                    )
+    # create binary data for acii
+    hashed_password = hexlify(hashed_password).decode('ascii')
+    
+    return hashed_password
+
