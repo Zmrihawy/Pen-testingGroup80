@@ -9,6 +9,7 @@ from views.open_projects import Open_projects
 from views.project import Project
 from views.index import Index
 from views.apply import Apply
+from views.change_password import Change_password
 
 # Connect to smtp server, enables web.sendmail()
 try:
@@ -31,6 +32,7 @@ urls = (
     '/open_projects', 'Open_projects',
     '/project', 'Project',
     '/apply', 'Apply',
+    '/change_password','Change_password'
 )
                               
 # Initialize application using the web py framework

@@ -182,3 +182,33 @@ def get_qurery_frequency(username, ip, fullpath):
         cursor.close()
         db.close()
     return count_access_time
+
+def update_user_password(username, password, ip, fullpath):
+    """
+    Update user's password
+
+        :param username: The user attempting to authenticate
+        :param password: The new corresponding password
+        :type username: str
+        :type password: str
+        :return: user
+    """
+    db.connect()
+    cursor = db.cursor(prepared=True)
+     
+    sql_cmd = """UPDATE users SET password=%s WHERE username = %s """
+    sql_value = (password,username,)
+    
+    try:
+        cursor.execute(sql_cmd, sql_value)
+        logger.log_input_msg("A user success update_user_password:{}-{}-{}".format(ip, fullpath, sql_value))
+        db.commit()
+    except mysql.connector.Error as err:
+        logger.log_error_msg("Failed executing query update_user_password: {}".format(err))
+        print("Failed executing query update_user_password: {}".format(err))
+        cursor.fetchall()
+        exit(1)
+    finally:
+        cursor.close()
+        db.close()
+    return

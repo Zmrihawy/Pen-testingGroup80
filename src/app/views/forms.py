@@ -42,6 +42,16 @@ project_form = form.Form(
     form.Button("declined", type="submit", value=True, html="Decline Delivery")
 )
 
+# Define the change password form
+change_password_form = form.Form(
+    form.Password("old_password", description="Old password"),
+    form.Password("new_password", description="New password"),
+    form.Password("comfirm_new_password", description= "Comfirm Password"),
+    form.Button("Submit", type="submit", description="Submit"),
+)
+
+
+
 def get_task_form_elements(identifier=0, task_title="", task_description="", budget=""):
     """
     Generate a set of task form elements
