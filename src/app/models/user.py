@@ -95,7 +95,7 @@ def match_user(username, password, ip, fullpath):
     db.connect()
     cursor = db.cursor(prepared=True)
      
-    sql_cmd = """SELECT userid, username from users where username = %s AND password = %s"""
+    sql_cmd = """SELECT userid, username FROM users WHERE username = %s AND password = %s AND temp = 0"""
     sql_value = (username, password,)
     #query = ("SELECT userid, username from users where username = \"" + username + 
     #        "\" and password = \"" + password + "\"")

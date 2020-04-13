@@ -13,8 +13,10 @@ not_empty = form.regexp(r".+", "- This field is required")
 login_form = form.Form(
     form.Textbox("username", description="Username"),
     form.Password("password", description="Password"),
+    form.Textbox("totp", description="Google Authenticator Code:"),
     form.Checkbox("remember", description= "Remember me", checked=False, value=False),
-    form.Button("Log In", type="submit", description="Login"),
+    form.Button("login", value="login", type="submit", description="Login", html="<b>Log in</b>"),
+    form.Button("forget", value="forget", type="submit", description="Forget Password", html="<b>Forget Password</b>")
 )
 
 # Define the register form 
@@ -47,10 +49,21 @@ change_password_form = form.Form(
     form.Password("old_password", description="Old password"),
     form.Password("new_password", description="New password"),
     form.Password("comfirm_new_password", description= "Comfirm Password"),
-    form.Button("Submit", type="submit", description="Submit"),
+    form.Button("Submit", type="submit", description="Submit")
 )
 
+# Define the forget password form
+forget_password_form = form.Form(
+    form.Textbox("username", description="Enter your user name"),
+    form.Textbox("email", description="Enter your email"),
+    form.Button("Submit", type="submit", description="Submit")
+)
 
+# Define the reset password form
+reset_password_form = form.Form(
+    form.Password("new_password", description="Enter your new password"),
+    form.Button("Submit", type="submit", description="Submit")
+)
 
 def get_task_form_elements(identifier=0, task_title="", task_description="", budget=""):
     """

@@ -2,7 +2,7 @@ from binascii import hexlify, unhexlify
 from hashlib import pbkdf2_hmac, sha256
 import os
 import web
-import random, string
+import random, string, secrets
 
 SHA = 'sha256'
 SHA_VALUE = 100000
@@ -92,3 +92,5 @@ def hashed_value(raw_password, salt):
     
     return hashed_password
 
+def generate_token():
+    return secrets.token_urlsafe(16)

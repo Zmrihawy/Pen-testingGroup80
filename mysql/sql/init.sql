@@ -12,6 +12,9 @@ CREATE TABLE users (
   postal_code VARCHAR(50),
   country VARCHAR(50),
   create_date DATE,
+  temp BOOLEAN,
+  google_token VARCHAR(100),
+  verify_token VARCHAR (100),
   PRIMARY KEY (userid)
 );
 
