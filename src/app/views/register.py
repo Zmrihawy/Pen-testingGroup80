@@ -2,7 +2,7 @@ import web
 from views.forms import register_form
 import models.register
 import models.user
-from views.utils import get_nav_bar, csrf, csrf_decorate, generate_salt, hashed_value
+from views.utils import get_nav_bar, csrf, csrf_decorate, generate_salt, hashed_value, generate_token
 import os
 
 # Get html templates
@@ -58,13 +58,39 @@ class Register:
 
             # generate salted password string
             password = (salt+hashed_password)
+
+            # set this account as unverified
+            temp_account = True
+
+            # generate a save url token
+            temp_token = generate_token()
+
+            #TODO: generate a google token
+            google_token = None
             
+            # send web mail
+            # Send user email
+            reset_url = "http://localhost/validate_account?reset_token=" + temp_token
+            msg = "Please verfiy your account via this link.\n" + str(reset_url)
+           
+            #send mail (currently it is currpted)
+            #self.send_mail(data.email, msg)
+
             # write into database
             models.register.set_user(data.username, password, data.full_name, data.company, data.email, data.street_address,
-            data.city, data.state, data.postal_code, data.country, ip_addr, path)
-            return render.register(nav, register_form, "User registered!")
+            data.city, data.state, data.postal_code, data.country, ip_addr, path, temp_account, google_token, temp_token)
+
+            # msg for notification
+            return render.register(nav, register_form, "User registered and verified with email!\n" + msg)
+        except Exception :
+            print(Exception)
+        
         except:
             print(exit[0])
             return render.register(nav, register_form, "Fail to register!")
-        #finally:
-            #return render.register(nav, register_form, "Activity Recorded.")
+
+    def send_mail(self, mail, msg):
+        smtp_server = "molde.idi.ntnu.no:25"
+        web.config.smtp_server = smtp_server
+        web.sendmail('beelance@ntnu.no', mail, 'Account verify from Beelance', msg)
+        return

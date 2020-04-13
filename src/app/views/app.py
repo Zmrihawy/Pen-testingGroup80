@@ -10,17 +10,22 @@ from views.project import Project
 from views.index import Index
 from views.apply import Apply
 from views.change_password import Change_password
+from views.forget_password import Forget_password
+from views.reset_password import Reset_password
+from views.validate_account import Validate_account
 
 # Connect to smtp server, enables web.sendmail()
+'''
 try:
-    smtp_server = os.getenv("smtp_server") + ":25"
-    web.config.smtp_server = smtp_server 
-except:
+    #smtp_server = os.getenv("smtp_server") + ":25"
+    #web.config.smtp_server = smtp_server
     smtp_server = "molde.idi.ntnu.no:25"
     web.config.smtp_server = smtp_server
-
+except:
+    print("Mail server setup error!")
+'''
 # Example use of the smtp server, insert username
-# web.sendmail("beelance@ntnu.no", "<username>@stud.ntnu.no", "Hello", "Grz, the beelance app is running")
+#web.sendmail("beelance@ntnu.no", "test@stud.ntnu.no", "Hello", "Grz, the beelance app is running")
 
 # Define application routes
 urls = (
@@ -32,7 +37,10 @@ urls = (
     '/open_projects', 'Open_projects',
     '/project', 'Project',
     '/apply', 'Apply',
-    '/change_password','Change_password'
+    '/change_password','Change_password',
+    '/forget_password','Forget_password',
+    '/reset_password','Reset_password',
+    '/validate_account','Validate_account',
 )
                               
 # Initialize application using the web py framework

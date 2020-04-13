@@ -40,23 +40,26 @@ class Login():
         """
         session = web.ctx.session
         nav = get_nav_bar(session)
-        data = web.input(username="", password="", remember=False)
-        
+        data = web.input(username="", password="", login = "", forget="", remember=False)
+        print(data)
         current_time = time.time()
-
+        
         try:
             # log ip information
             ip_addr = web.ctx["ip"]
             accessed_path = web.ctx["fullpath"]
+            request_header = web.ctx.env['HTTP_USER_AGENT']
+            msg_request = accessed_path + request_header
 
-            #get user's salt and password with attempt try
-            log_time_date = datetime.datetime.fromtimestamp(current_time).strftime('%Y-%m-%d %H:%M:%S')
-            record_user_login(data.username, ip_addr, accessed_path, log_time_date)
-            #print("logged_login")
-            stored_password = models.user.get_user_hashed_password(data.username, ip_addr, accessed_path)
+            #check data password exits and click on 
+            if data.password and data.login=="login":
+                #get user's salt and password with attempt try
+                log_time_date = datetime.datetime.fromtimestamp(current_time).strftime('%Y-%m-%d %H:%M:%S')
+                record_user_login(data.username, ip_addr, msg_request, log_time_date)
 
-            #check data password exits
-            if data.password:
+                #print("logged_login")
+                stored_password = models.user.get_user_hashed_password(data.username, ip_addr, accessed_path)
+
                 # match with database
                 # get salt value, type<str>
                 salt = stored_password[:64]
@@ -68,8 +71,8 @@ class Login():
                 test_password = (salt + hashed_password_validate)
                 
                 # If there is a matching user/password in the database the user is logged in
-                try_times = models.user.get_qurery_frequency(data.username, ip_addr, accessed_path)
                 try_times = 0
+                try_times = models.user.get_qurery_frequency(data.username, ip_addr, accessed_path)
                 print(try_times)
                 
                 if hashed_password_validate == password:
@@ -83,12 +86,16 @@ class Login():
                     return render.login(nav, login_form, "- Invalid tryout, Resume login in 30 minuts")
                 else:
                     return render.login(nav, login_form, "- User authentication failed")
+            # click on forget password
+            elif data.forget == "forget":
+                raise web.seeother("/forget_password")
             else:
                 return render.login(nav, login_form, "- Please provide password")
             
             #password_hash = hashlib.md5(b'TDT4237' + data.password.encode('utf-8')).hexdigest()
             
-        except:
+        except Exception as e:
+            print("An execute error in login: {}".format(e))
             return render.login(nav, login_form, "- Something went wrong!")
 
 

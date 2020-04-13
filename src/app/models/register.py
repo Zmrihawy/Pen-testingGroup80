@@ -4,7 +4,7 @@ import models.logger as logger
 import datetime
 
 def set_user(username, password, full_name, company, email, 
-        street_address, city, state, postal_code, country, ip, path):
+        street_address, city, state, postal_code, country, ip, path, temp, google_token, temp_token):
     """
     Register a new user in the database
         :param username: The users unique user name
@@ -17,6 +17,12 @@ def set_user(username, password, full_name, company, email,
         :param state: The state where the user lives
         :param postal_code: The corresponding postal code
         :param country: The users country
+        :param ip: The user's ip address
+        :param path: The user's access path
+        :param temp: The user's account is temporary or not
+        :param google_token: The user's google token
+        :param temp_token: The user's access token
+
         :type username: str
         :type password: str
         :type full_name: str
@@ -27,14 +33,22 @@ def set_user(username, password, full_name, company, email,
         :type state: str
         :type postal_code: str
         :type country: str
+        :type ip: num
+        :type path: str
+        :type temp: boolean
+        :type google_token: str 
+        :type temp_token: str
     """
     db.connect()
     cursor = db.cursor(prepared=True)
+    # get register date
     current_time = datetime.datetime.today().strftime('%Y-%m-%d')
-    sql_cmd = """INSERT INTO users VALUES (NULL, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"""
+    #genereate sql command
+    sql_cmd = """INSERT INTO users VALUES (NULL, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"""
     sql_value = (username, password, full_name, company,
                  email, street_address, city,
-                 state, postal_code, country,current_time,)
+                 state, postal_code, country,current_time,
+                 temp, google_token, temp_token)
     #query = ("INSERT INTO users VALUES (NULL, \"" + username + "\", \"" + 
     #    password + "\", \"" + full_name + "\" , \"" + company + "\", \"" + 
     #    email + "\", \"" + street_address + "\", \"" + city + "\", \"" + 
