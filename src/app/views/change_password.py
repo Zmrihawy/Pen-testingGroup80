@@ -10,7 +10,7 @@ render = web.template.render('templates/')
 # Set global token
 web.template.Template.globals['csrf_token'] = csrf
 
-class Change_password:
+class Change_password():
 
     def GET(self):
         """
@@ -40,7 +40,7 @@ class Change_password:
 
         # check each field is endered values.
         if not change_password.validates():
-            return render.register(nav, change_password, "All fields must be valid.")
+            return render.change_password(nav, change_password, "All fields must be valid.")
         
         try:
             # log ip information
@@ -72,14 +72,18 @@ class Change_password:
                     hashed_new_password = hashed_value(data.comfirm_new_password, new_salt)
                     new_password = (new_salt + hashed_new_password)
                     #update new hased value to database
-                    print(hashed_new_password, session.username)
+                    #print(hashed_new_password, session.username)
                     models.user.update_user_password(session.username, new_password, ip_addr, accessed_path)
-                    print("updated password!")
+                    #print("updated password!")
+                    # after update, return to index
                     raise web.seeother("/")
+                # validate value for password
                 elif password != data.hashed_old_password:
-                    return render.login(nav, change_password_form, "- Please check old password again!")                
+                    return render.login(nav, change_password_form, "- Please check old password again!")
+                # check the new password is same or not             
                 elif data.old_password == data.new_password:
-                    return render.login(nav, change_password_form, "- Same password") 
+                    return render.login(nav, change_password_form, "- Same password")
+                # other sictuation
                 else:
                     return render.login(nav, change_password_form, "- The new password and comfirm new password are not match!")
             else:
