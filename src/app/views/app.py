@@ -13,6 +13,7 @@ from views.change_password import Change_password
 from views.forget_password import Forget_password
 from views.reset_password import Reset_password
 from views.validate_account import Validate_account
+from views.two_fa import Two_FA
 
 # Connect to smtp server, enables web.sendmail()
 '''
@@ -41,6 +42,7 @@ urls = (
     '/forget_password','Forget_password',
     '/reset_password','Reset_password',
     '/validate_account','Validate_account',
+    '/two_fa','Two_FA',
 )
                               
 # Initialize application using the web py framework
@@ -70,3 +72,13 @@ def session_hook():
 app.add_processor(web.loadhook(session_hook))
 
 app = app.wsgifunc()
+
+'''
+# create a folder for storing pictures
+_is_current_dir = os.path.exists(os.path.join(os.getcwd(), "token_img"))
+
+if _is_current_dir is False:
+    os.mkdir("token_img")
+else:
+    pass
+'''

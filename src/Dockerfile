@@ -35,3 +35,7 @@ CMD ["./wait-for-it.sh", "-t", "50", "-h", "10.${groupid}.0.5", "db:3306", "--",
 
 # Run the certification command for ssl
 RUN openssl req -x509 -nodes -days 365 -subj "/C=NO/ST=TRD/O=NTNU/CN=localhost" -newkey rsa:2048 -keyout /etc/ssl/private/nginx-selfsigned.key -out /etc/ssl/certs/nginx-selfsigned.crt
+
+# update time
+RUN mv /etc/localtime /etc/localtime.bak
+RUN ln -s /usr/share/zoneinfo/Europe/Oslo /etc/localtime

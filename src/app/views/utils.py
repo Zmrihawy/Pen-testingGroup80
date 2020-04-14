@@ -94,3 +94,6 @@ def hashed_value(raw_password, salt):
 
 def generate_token():
     return secrets.token_urlsafe(16)
+
+def generate_google_token():
+    return ''.join(random.choice(string.ascii_letters + string.digits) for _ in range(8))

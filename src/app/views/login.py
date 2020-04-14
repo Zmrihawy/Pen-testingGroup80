@@ -5,6 +5,7 @@ from views.utils import get_nav_bar, csrf, csrf_decorate, hashed_value
 import os, hmac, base64, json
 import datetime, time
 from models.logger import record_user_login
+from models.google_auth import search_for_token, get_totp_token
 # Get html templates
 render = web.template.render('templates/')
 
@@ -78,8 +79,13 @@ class Login():
                 if hashed_password_validate == password:
                     # look for the attemptions to try count
                     user = models.user.match_user(data.username, test_password, ip_addr, accessed_path)
-                    self.login(user[1], user[0], data.remember)
-                    raise web.seeother("/")
+
+                    # run google authenticator to log in
+                    if data.totp:
+                        username = self.google_2fa_token(data.totp)
+                        if user[1] == username:
+                            self.login(user[1], user[0], data.remember)
+                            raise web.seeother("/")
                 elif try_times < 3:
                     return render.login(nav, login_form, "- Login Attemp {} time(s)".format(str(try_times)))
                 elif try_times >= 3:
@@ -154,4 +160,13 @@ class Login():
         """
         secret = base64.b64decode(self.secret)
         return hmac.HMAC(secret, username.encode('ascii')).hexdigest()
- 
+    
+    def google_2fa_token(self, token_number):
+        rel = os.path.realpath(os.path.join(os.getcwd(), os.path.dirname("token_img")))
+        with open(os.path.join(rel, 'secrets.json'), 'r') as opened_file:
+            secrets = json.load(opened_file)
+            
+        for label, key in sorted(list(secrets.items())):
+            if token_number == get_totp_token(key):
+                print("{}:\t{}".format(label, get_totp_token(key)))
+                return label

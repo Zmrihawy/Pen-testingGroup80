@@ -1,0 +1,25 @@
+$def with (nav, two_fa_form, datafile, message)
+
+<head>
+    <title>Beelance2</title>
+    <meta charset="utf-8">
+    <link rel="stylesheet" type="text/css" href="static/stylesheet.css">
+    <link rel="shortcut icon" type="image/png" href="static/honeybee.png"/>
+
+</head>
+
+<body>
+    
+    $:nav
+        <h2>Verify token</h2>
+        <p>Please install Google Authenticator for validation</p>
+        <img src="static/picture.png" alt="Token Picture" width="200" height="200">
+        <form method="POST">
+            <input type="hidden" name="csrf_token" value="$csrf_token()" />
+
+            $:two_fa_form.render()
+        </form> 
+    <p>$:message</p>
+    <img src="static/honeybee.png" alt="Honeybee">
+
+</body>

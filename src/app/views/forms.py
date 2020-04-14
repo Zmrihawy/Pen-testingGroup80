@@ -5,7 +5,7 @@ from models.user import get_users, get_user_id_by_name
 
 # Regex for input validation
 vemail = form.regexp(r".*@.*", "- Must be a valid email address")
-vpass = form.regexp(r".{6,100}$", '- Must be atleast 6 characters long')
+vpass = form.regexp(r".{8,100}[A-Za-z0-9@#$%^&+=]$", '- Must be atleast 8 characters long')
 number = form.regexp(r"^[0-9]+$", "- Must be a number")
 not_empty = form.regexp(r".+", "- This field is required")
 
@@ -46,22 +46,28 @@ project_form = form.Form(
 
 # Define the change password form
 change_password_form = form.Form(
-    form.Password("old_password", description="Old password"),
-    form.Password("new_password", description="New password"),
-    form.Password("comfirm_new_password", description= "Comfirm Password"),
+    form.Password("old_password", vpass, description="Old password"),
+    form.Password("new_password", vpass, description="New password"),
+    form.Password("comfirm_new_password",vpass, description= "Comfirm Password"),
     form.Button("Submit", type="submit", description="Submit")
 )
 
 # Define the forget password form
 forget_password_form = form.Form(
-    form.Textbox("username", description="Enter your user name"),
-    form.Textbox("email", description="Enter your email"),
+    form.Textbox("username", not_empty, description="Enter your user name"),
+    form.Textbox("email", vemail,description="Enter your email"),
     form.Button("Submit", type="submit", description="Submit")
 )
 
 # Define the reset password form
 reset_password_form = form.Form(
-    form.Password("new_password", description="Enter your new password"),
+    form.Password("new_password",vpass, description="Enter your new password"),
+    form.Button("Submit", type="submit", description="Submit")
+)
+
+# Define the 2FA login form
+two_fa_form = form.Form(
+    form.Textbox("token",not_empty, description="Enter your token"),
     form.Button("Submit", type="submit", description="Submit")
 )
 
